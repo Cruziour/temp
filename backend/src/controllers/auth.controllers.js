@@ -62,19 +62,40 @@ const verifyReceiveOtp = asyncHandler(async (req, res) => {
   if (!isValid) {
     throw new ApiError(400, 'Invalid otp');
   }
-  let user;
+  let userData;
   try {
-    user = await User.findOne({ phone });
-    if (!user) {
-      user = await User.create({ phone });
+    userData = await User.findOne({ phone });
+    if (!userData) {
+      userData = await User.create({ phone });
     }
   } catch (error) {
     throw new ApiError(500, 'Error creating user');
   }
+
   // Token
   const { accessToken, refreshToken } =
-    await generateAccessAndRefreshToken(user);
-  return res.status(200).json(new ApiResponse(200, { phone }, 'SuucessFully'));
+    await generateAccessAndRefreshToken(userData);
+  // const options = {
+  //   httpOnly: true,
+  //   secure: process.env.NODE_ENV === 'production',
+  //   maxAge: 1000 * 60 * 60 * 24 * 30,
+  // };
+
+  const user = await User.findById(userData?._id).select('-refreshToken');
+
+  if (!user) {
+    throw new ApiError(404, 'User not found');
+  }
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        { user, accessToken, refreshToken },
+        'Otp Verify success.'
+      )
+    );
 });
 
 export { sendOtp, verifyReceiveOtp };
