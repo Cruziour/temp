@@ -6,7 +6,7 @@ import Button from '../../components/shared/Button/Button';
 const Home = () => {
   const navigate = useNavigate()
   const startRegister = () => {
-    navigate('/register')
+    navigate('/authenticate');
   }
   return (
     <div className="container flex justify-center mt-20">
@@ -17,13 +17,7 @@ const Home = () => {
           sure nothing breaks :)
         </p>
         <div className="flex justify-center mt-5">
-          <Button btnText={'Get your username'} onClick={startRegister} />
-        </div>
-        <div className="mt-3 text-sm text-blue-600">
-          <span>Have an invite text?</span>
-          <Link to="/login" className="font-bold pl-2">
-            Sign in
-          </Link>
+          <Button btnText={`Let's Go`} onClick={startRegister} />
         </div>
       </Card>
     </div>

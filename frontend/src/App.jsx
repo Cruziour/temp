@@ -51,6 +51,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+        {/* <Route path="*" element={<NotFound />} /> */}
       </Route>
     )
   );
@@ -58,7 +59,7 @@ const App = () => {
   return <RouterProvider router={router} />;
 };
 
-// GuestRoute component
+// Guest Routes
 const GuestRoute = ({ children }) => {
   const location = useLocation();
 
