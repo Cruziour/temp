@@ -1,8 +1,8 @@
-import { Router } from 'express'
-import { sendOtp } from '../controllers/auth.controllers.js'
+import { Router } from 'express';
+import { sendOtp } from '../controllers/auth.controllers.js';
 
-const router = Router()
+const router = Router();
 
-router.route('/send-otp').post(sendOtp)
+router.route('/send-otp').post(sendOtp);
 
 export default router;

@@ -3,9 +3,11 @@ import { generateOtp, hashOtp } from '../utils/otp-service/otp.services.js';
 
 const sendOtp = asyncHandler(async (req, res) => {
   const { phone } = req.body;
+
   if (!phone) {
     throw new ApiError(400, 'Please provide phone number');
   }
+  
   //generate otp
   const otp = await generateOtp();
 
