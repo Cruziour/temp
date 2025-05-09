@@ -25,7 +25,7 @@ const StepPhoneOrEmail = ({ onNext }) => {
                   : { background: '#1D1D1D' }
               }
             >
-              <img src="/images/phone-white.png" alt="phone" />
+              <img src="/images/phone-white.png" alt="phone" className='w-7 h-7' />
             </button>
             <button
               onClick={() => setType('email')}
@@ -36,7 +36,7 @@ const StepPhoneOrEmail = ({ onNext }) => {
                   : { background: '#1D1D1D' }
               }
             >
-              <img src="/images/mail-white.png" alt="email" />
+              <img src="/images/mail-white.png" alt="email" className='w-6 h-6' />
             </button>
           </div>
           <Component onNext={onNext} />
