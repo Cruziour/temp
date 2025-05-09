@@ -3,7 +3,7 @@ import Card from '../../../../components/shared/Card/Card';
 import Button from '../../../../components/shared/Button/Button';
 import TextInput from '../../../../components/shared/TextInput/TextInput';
 
-const Phone = () => {
+const Phone = ({ onNext }) => {
   const [phoneNumber, setPhoneNumber] = useState('');
   return (
     <div className="flex justify-center items-center">
@@ -16,7 +16,7 @@ const Phone = () => {
           />
           <div className="flex justify-center mt-8">
             <div>
-              <Button btnText={`Next`} />
+              <Button btnText={`Next`} onClick={onNext} />
             </div>
           </div>
           <div className="flex justify-center text-gray-400">
