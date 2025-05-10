@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -9,11 +10,6 @@ import {
 } from 'react-router-dom';
 import Layout from './Layout';
 import { Activate, Authenticate, Home, Rooms } from './pages/index';
-
-const isAuth = false;
-const user = {
-  activated: false,
-};
 
 const App = () => {
   const router = createBrowserRouter(
@@ -62,7 +58,7 @@ const App = () => {
 // Guest Routes
 const GuestRoute = ({ children }) => {
   const location = useLocation();
-
+  const { isAuth } = useSelector((state) => state.authSlice);
   return !isAuth ? (
     children
   ) : (
@@ -72,6 +68,7 @@ const GuestRoute = ({ children }) => {
 
 // Semi Protected Routes
 const SemiProtectedRoute = ({ children }) => {
+  const { isAuth, user } = useSelector((state) => state.authSlice);
   const location = useLocation();
   return !isAuth ? (
     <Navigate to={'/'} replace state={{ from: location }} />
@@ -84,6 +81,7 @@ const SemiProtectedRoute = ({ children }) => {
 
 // Protected Routes
 const ProtectedRoute = ({ children }) => {
+  const { isAuth, user } = useSelector((state) => state.authSlice);
   const location = useLocation();
   return !isAuth ? (
     <Navigate to={'/'} replace state={{ from: location }} />

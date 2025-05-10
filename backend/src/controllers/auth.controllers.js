@@ -67,14 +67,17 @@ const verifyReceiveOtp = asyncHandler(async (req, res) => {
   }
 
   // Find or create user
-  let userData = await User.findOne({ phone });
+  let userData;
 
-  if (!userData) {
-    try {
+  try {
+    userData = await User.findOne({ phone });
+
+    if (!userData) {
       userData = await User.create({ phone });
-    } catch (error) {
-      throw new ApiError(500, 'Error creating user');
     }
+  } catch (error) {
+    console.log(error);
+    throw new ApiError(500, 'Error finding or creating user');
   }
 
   // Generate tokens
@@ -82,7 +85,9 @@ const verifyReceiveOtp = asyncHandler(async (req, res) => {
     await generateAccessAndRefreshToken(userData);
 
   // Remove refreshToken field before sending response
-  const user = await User.findById(userData._id).select('-refreshToken');
+  const user = await User.findById(userData._id).select(
+    '-refreshToken -updatedAt'
+  );
   if (!user) {
     throw new ApiError(404, 'User not found');
   }
@@ -98,6 +103,5 @@ const verifyReceiveOtp = asyncHandler(async (req, res) => {
       )
     );
 });
-
 
 export { sendOtp, verifyReceiveOtp };

@@ -6,26 +6,28 @@ const initialState = {
   otp: {
     hash: '',
     phone: '',
-    expires: ''
-  }
+    expires: '',
+  },
 };
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-//     setAuth(state, action) => {
-// //
-//     },
+    setAuth: (state, action) => {
+      const { user } = action.payload;
+      state.user = user;
+      state.isAuth = true
+    },
     setOtp: (state, action) => {
-        const {phone, hash, expires} = action.payload
-        state.otp.phone = phone
-        state.otp.hash = hash
-        state.otp.expires = expires
-    }
+      const { phone, hash, expires } = action.payload;
+      state.otp.phone = phone;
+      state.otp.hash = hash;
+      state.otp.expires = expires;
+    },
   },
 });
 
-export const { setOtp} = authSlice.actions
+export const { setAuth, setOtp } = authSlice.actions;
 
 export default authSlice.reducer;

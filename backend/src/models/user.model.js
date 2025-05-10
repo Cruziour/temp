@@ -5,12 +5,9 @@ const userSchema = new mongoose.Schema(
   {
     phone: {
       type: String,
-      
-    },
-    email: {
-      type: String,
+      required: true,
       unique: true,
-      trim: true
+      index: true,
     },
     activated: {
       type: Boolean,
@@ -18,7 +15,7 @@ const userSchema = new mongoose.Schema(
     },
     refreshToken: {
       type: String,
-    }
+    },
   },
   { timestamps: true }
 );
