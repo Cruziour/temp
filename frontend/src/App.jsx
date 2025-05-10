@@ -72,7 +72,7 @@ const SemiProtectedRoute = ({ children }) => {
   const location = useLocation();
   return !isAuth ? (
     <Navigate to={'/'} replace state={{ from: location }} />
-  ) : isAuth && !user.activated ? (
+  ) : isAuth && !user?.activated ? (
     children
   ) : (
     <Navigate to={'/rooms'} replace state={{ from: location }} />
@@ -85,7 +85,7 @@ const ProtectedRoute = ({ children }) => {
   const location = useLocation();
   return !isAuth ? (
     <Navigate to={'/'} replace state={{ from: location }} />
-  ) : isAuth && !user.activated ? (
+  ) : isAuth && !user?.activated ? (
     <Navigate to={'/active'} replace state={{ from: location }} />
   ) : (
     children
