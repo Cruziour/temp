@@ -2,34 +2,41 @@ import React, { useState } from 'react';
 import Button from '../../../components/shared/Button/Button';
 import Card from '../../../components/shared/Card/Card';
 import { useDispatch, useSelector } from 'react-redux';
-import { setAvatar } from '../../../redux/slice/activateSlice';
 import { activationService } from '../../../services';
+import { setAuth } from '../../../redux/slice/authSlice'
 
 const StepAvatar = () => {
   const dispatch = useDispatch();
-  const { name, avatar } = useSelector((state) => state.activateSlice);
+  const { name } = useSelector((state) => state.activateSlice);
   const [image, setImage] = useState('/images/monkey-avatar.png');
+  const [file, setFile] = useState(null);
 
   const captureImage = (e) => {
-    const file = e.target.files[0];
-    // convert file base 64 string using browser api
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = function () {
-      setImage(reader.result);
-      dispatch(setAvatar(reader.result));
-    };
+    const uploadedFile = e.target.files[0];
+    if (!uploadedFile) return;
+    setFile(uploadedFile);
+    const imageUrl = URL.createObjectURL(uploadedFile);
+    setImage(imageUrl);
   };
 
   const submit = async () => {
-    // do something
+    if (!file || !name) return;
+
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('avatar', file);
+
     try {
-      const { data } = await activationService({ name, avatar });
+      const { data } = await activationService(formData); 
+      if(data.auth) {
+        dispatch(setAuth(data))
+      }
       console.log(data);
     } catch (error) {
       console.error(error, 'stepAvatar');
     }
   };
+
   return (
     <div className="flex justify-center items-center mt-20 container">
       <Card title={`Okay, ${name}!`} icon={'monkey-emoji'}>
@@ -48,6 +55,7 @@ const StepAvatar = () => {
         <div className="pt-2">
           <input
             type="file"
+            accept="image/*"
             onChange={captureImage}
             className="hidden"
             id="avatarInput"
@@ -60,9 +68,7 @@ const StepAvatar = () => {
           </label>
         </div>
         <div className="flex justify-center mt-2">
-          <div>
-            <Button btnText={`Next`} onClick={submit} />
-          </div>
+          <Button btnText={`Next`} onClick={submit} />
         </div>
       </Card>
     </div>

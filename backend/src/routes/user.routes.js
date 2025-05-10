@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import verifyJwt from '../middlewares/auth.middleware.js';
+import { upload } from '../middlewares/multer.middleware.js';
 import {
   activateUser,
   sendOtp,
@@ -13,6 +14,8 @@ router.route('/send-otp').post(sendOtp);
 router.route('/verify-otp').post(verifyReceiveOtp);
 
 //secure routes
-router.route('/activate').post(verifyJwt, activateUser);
+router
+  .route('/activate')
+  .post(verifyJwt, upload.single('avatar'), activateUser);
 
 export default router;

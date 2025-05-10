@@ -9,6 +9,10 @@ const userSchema = new mongoose.Schema(
       unique: true,
       index: true,
     },
+    name: {
+      type: String,
+      required: false
+    },
     activated: {
       type: Boolean,
       default: false,
@@ -16,6 +20,9 @@ const userSchema = new mongoose.Schema(
     refreshToken: {
       type: String,
     },
+    avatar: {
+      type: String,
+    }
   },
   { timestamps: true }
 );

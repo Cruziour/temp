@@ -14,6 +14,10 @@ export async function verifyOtpService(formData) {
 }
 
 export async function activationService(formData) {
-  const { data } = await axiosInstance.post('/api/v1/user/activate', formData);
+  const { data } = await axiosInstance.post('/api/v1/user/activate', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    }
+  });
   return data;
 }

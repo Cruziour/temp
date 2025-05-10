@@ -6,6 +6,10 @@ import {
   sendOtpBySms,
   verifyOtp,
 } from '../utils/otp-service/otp.services.js';
+import {
+  deleteFromCloudinary,
+  uploadOnCloudinary,
+} from '../utils/cloudinary.js';
 
 const generateAccessAndRefreshToken = async (user) => {
   if (!user) {
@@ -84,8 +88,8 @@ const verifyReceiveOtp = asyncHandler(async (req, res) => {
 
   const options = {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production'
-  }
+    secure: process.env.NODE_ENV === 'production',
+  };
 
   // Remove refreshToken field before sending response
   const user = await User.findById(userData?._id).select(
@@ -109,8 +113,55 @@ const verifyReceiveOtp = asyncHandler(async (req, res) => {
     );
 });
 
-const activateUser = asyncHandler(async(req, res) => {
+const activateUser = asyncHandler(async (req, res) => {
   // activation logic
-})
+  const { name } = req.body;
+  const avatarLocalPath = req.file?.path;
+
+  if (!name || !avatarLocalPath) {
+    throw new ApiError(400, 'Please provide name and avatar');
+  }
+
+  let avatar = null;
+  try {
+    // Upload avatar to cloud storage
+    avatar = await uploadOnCloudinary(avatarLocalPath);
+    if (!avatar) {
+      throw new ApiError(500, 'Error uploading avatar to cloudinary');
+    }
+  } catch (error) {
+    throw new ApiError(500, 'Error uploading avatar to cloudinary');
+  }
+
+  try {
+    // Activate user
+    const user = await User.findOneAndUpdate(
+      req.user?._id,
+      {
+        $set: {
+          activated: true,
+          name: name.trim(),
+          avatar: avatar?.secure_url,
+        },
+      },
+      { new: true }
+    ).select('-refreshToken -updatedAt');
+    if (!user) {
+      throw new ApiError(404, 'User not found');
+    }
+    return res
+      .status(201)
+      .json(
+        new ApiResponse(
+          201,
+          { user, auth: true },
+          'User activation successfully.'
+        )
+      );
+  } catch (error) {
+    await deleteFromCloudinary(avatar?.public_id);
+    throw new ApiError(500, 'Error activating user');
+  }
+});
 
 export { sendOtp, verifyReceiveOtp, activateUser };
