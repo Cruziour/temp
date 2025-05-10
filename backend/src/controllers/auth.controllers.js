@@ -39,63 +39,65 @@ const sendOtp = asyncHandler(async (req, res) => {
   const hash = hashOtp(data);
 
   // send otp using phone number
-  await sendOtpBySms(phone, otp);
+  // await sendOtpBySms(phone, otp);
 
   res
     .status(200)
-    .json(new ApiResponse(200, { hash, expires, phone }, 'SuucessFully'));
+    .json(new ApiResponse(200, { hash, expires, phone, otp }, 'SuucessFully'));
 });
 
 const verifyReceiveOtp = asyncHandler(async (req, res) => {
   const { phone, otp, hash, expires } = req.body;
 
+  // Validate required fields
   if (!otp || !hash || !phone || !expires) {
     throw new ApiError(400, 'Please provide all required fields');
   }
 
+  // Check OTP expiration
   if (Date.now() > +expires) {
-    throw new ApiError(400, 'Otp expired.');
+    throw new ApiError(400, 'OTP expired');
   }
 
+  // Verify OTP
   const data = `${phone}.${otp}.${expires}`;
   const isValid = verifyOtp(hash, data);
   if (!isValid) {
-    throw new ApiError(400, 'Invalid otp');
-  }
-  let userData;
-  try {
-    userData = await User.findOne({ phone });
-    if (!userData) {
-      userData = await User.create({ phone });
-    }
-  } catch (error) {
-    throw new ApiError(500, 'Error creating user');
+    throw new ApiError(400, 'Invalid OTP');
   }
 
-  // Token
+  // Find or create user
+  let userData = await User.findOne({ phone });
+
+  if (!userData) {
+    try {
+      userData = await User.create({ phone });
+    } catch (error) {
+      throw new ApiError(500, 'Error creating user');
+    }
+  }
+
+  // Generate tokens
   const { accessToken, refreshToken } =
     await generateAccessAndRefreshToken(userData);
-  // const options = {
-  //   httpOnly: true,
-  //   secure: process.env.NODE_ENV === 'production',
-  //   maxAge: 1000 * 60 * 60 * 24 * 30,
-  // };
 
-  const user = await User.findById(userData?._id).select('-refreshToken');
-
+  // Remove refreshToken field before sending response
+  const user = await User.findById(userData._id).select('-refreshToken');
   if (!user) {
     throw new ApiError(404, 'User not found');
   }
 
+  // Send response
   return res
     .status(200)
     .json(
       new ApiResponse(
         200,
         { user, accessToken, refreshToken },
-        'Otp Verify success.'
+        'OTP verification successful'
       )
     );
 });
+
 
 export { sendOtp, verifyReceiveOtp };

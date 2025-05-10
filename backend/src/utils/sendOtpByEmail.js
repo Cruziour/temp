@@ -1,14 +1,17 @@
 import nodemailer from 'nodemailer';
 import { ApiError } from './ApiError';
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 // Create a test account or replace with real credentials.
 const transporter = nodemailer.createTransport({
-    service:'gamil',
-    auth:{
-        user:'your-email@gmail.com',
-        pass:'your-password'
-    }
-})
+  service: 'gamil',
+  auth: {
+    user: process.env.NODEMAILER_MAIL,
+    pass: process.env.NODEMAILER_PASS,
+  },
+});
 
 // Replace with your actual sender email
 const info = {

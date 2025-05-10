@@ -2,21 +2,40 @@ import React, { useState } from 'react';
 import Card from '../../../../components/shared/Card/Card';
 import Button from '../../../../components/shared/Button/Button';
 import TextInput from '../../../../components/shared/TextInput/TextInput';
+import { sendOtpService } from '../../../../services';
+import { useDispatch } from 'react-redux';
+import { setOtp } from '../../../../redux/slice/authSlice';
 
 const Phone = ({ onNext }) => {
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [phone, setPhone] = useState('');
+  const dispatch = useDispatch();
+
+  const submit = async () => {
+    try {
+      const { data } = await sendOtpService({ phone });
+      console.log(data,'phone');
+      
+      dispatch(
+        setOtp({ phone: data?.phone, hash: data?.hash, expires: data?.expires })
+      );
+      onNext();
+    } catch (error) {
+      console.log(error, 'Phone.jsx');
+    }
+  };
+
   return (
     <div className="flex justify-center items-center">
       <Card icon={'phone'} title={'Enter your phone number'}>
         <div className="mt-8 container">
           <TextInput
             placeholder={'1234567890'}
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
           />
           <div className="flex justify-center mt-8">
             <div>
-              <Button btnText={`Next`} onClick={onNext} />
+              <Button btnText={`Next`} onClick={submit} />
             </div>
           </div>
           <div className="flex justify-center text-gray-400">
