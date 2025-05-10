@@ -22,21 +22,23 @@ const StepOtp = () => {
   return (
     <div className="flex justify-center items-center mt-20 container">
       <Card title={'Enter the code we just texted you'} icon={'lock-emoji'}>
-        <TextInput
-          value={otp}
-          onChange={(e) => setOtp(e.target.value)}
-          placeholder={'2222'}
-        />
-        <div className="flex justify-center mt-8">
-          <div>
-            <Button btnText={`Next`} onClick={submit} />
+        <div className='mt-8'>
+          <TextInput
+            value={otp}
+            onChange={(e) => setOtp(e.target.value)}
+            placeholder={'2222'}
+          />
+          <div className="flex justify-center mt-8">
+            <div>
+              <Button btnText={`Next`} onClick={submit} />
+            </div>
           </div>
-        </div>
-        <div className="flex justify-center text-gray-400">
-          <p className="mt-4 w-72 text-sm">
-            By entering your number or email, you’re agreeing to our Terms of
-            Service and Privacy Policy. Thanks!
-          </p>
+          <div className="flex justify-center text-gray-400">
+            <p className="mt-4 w-72 text-sm">
+              By entering your number or email, you’re agreeing to our Terms of
+              Service and Privacy Policy. Thanks!
+            </p>
+          </div>
         </div>
       </Card>
     </div>

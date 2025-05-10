@@ -68,10 +68,8 @@ const verifyReceiveOtp = asyncHandler(async (req, res) => {
 
   // Find or create user
   let userData;
-
   try {
     userData = await User.findOne({ phone });
-
     if (!userData) {
       userData = await User.create({ phone });
     }
@@ -84,8 +82,13 @@ const verifyReceiveOtp = asyncHandler(async (req, res) => {
   const { accessToken, refreshToken } =
     await generateAccessAndRefreshToken(userData);
 
+  const options = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production'
+  }
+
   // Remove refreshToken field before sending response
-  const user = await User.findById(userData._id).select(
+  const user = await User.findById(userData?._id).select(
     '-refreshToken -updatedAt'
   );
   if (!user) {
@@ -95,6 +98,8 @@ const verifyReceiveOtp = asyncHandler(async (req, res) => {
   // Send response
   return res
     .status(200)
+    .cookie('refreshToken', refreshToken, options)
+    .cookie('accessToken', accessToken, options)
     .json(
       new ApiResponse(
         200,
@@ -104,4 +109,8 @@ const verifyReceiveOtp = asyncHandler(async (req, res) => {
     );
 });
 
-export { sendOtp, verifyReceiveOtp };
+const activateUser = asyncHandler(async(req, res) => {
+  // activation logic
+})
+
+export { sendOtp, verifyReceiveOtp, activateUser };

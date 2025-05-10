@@ -6,6 +6,14 @@ export async function sendOtpService(formData) {
 }
 
 export async function verifyOtpService(formData) {
-  const { data } = await axiosInstance.post('/api/v1/user/verify-otp', formData);
+  const { data } = await axiosInstance.post(
+    '/api/v1/user/verify-otp',
+    formData
+  );
+  return data;
+}
+
+export async function activationService(formData) {
+  const { data } = await axiosInstance.post('/api/v1/user/activate', formData);
   return data;
 }

@@ -6,7 +6,7 @@ const Card = ({ title, icon, children }) => {
       className="w-[500px] max-w-[90%] min-h-[300px] p-4 rounded-2xl text-center"
       style={{ background: '#1D1D1D' }}
     >
-      <div className="flex justify-center items-center gap-x-2 text-xl font-bold pt-1 mb-5">
+      <div className="flex justify-center items-center gap-x-2 text-xl font-bold pt-1">
         <img src={`/images/${icon}.png`} alt="" />
         <h1>{title}</h1>
       </div>
