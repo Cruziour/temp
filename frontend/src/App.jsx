@@ -11,6 +11,7 @@ import {
 import Layout from './Layout';
 import { Activate, Authenticate, Home, Rooms } from './pages/index';
 import { useLoadingWithRefresh } from './hooks/useLoadingWithRefresh';
+import Loader from './components/shared/Loader/Loader';
 
 const App = () => {
   const { loading } = useLoadingWithRefresh();
@@ -54,7 +55,15 @@ const App = () => {
     )
   );
 
-  return <>{loading ? 'Loading....' : <RouterProvider router={router} />}</>;
+  return (
+    <>
+      {loading ? (
+        <Loader message={'Loading Please wait.'} />
+      ) : (
+        <RouterProvider router={router} />
+      )}
+    </>
+  );
 };
 
 // Guest Routes

@@ -12,8 +12,9 @@ const StepOtp = () => {
   const { phone, hash, expires } = useSelector((state) => state.authSlice.otp);
 
   const submit = async () => {
+    if (!otp || !phone || !hash || !expires) return;
     try {
-      const { data } = await verifyOtpService({ phone, otp, hash, expires });  
+      const { data } = await verifyOtpService({ phone, otp, hash, expires });
       dispatch(setAuth(data));
     } catch (error) {
       console.log(error, 'stepOtp.jsx');
@@ -22,7 +23,7 @@ const StepOtp = () => {
   return (
     <div className="flex justify-center items-center mt-20 container">
       <Card title={'Enter the code we just texted you'} icon={'lock-emoji'}>
-        <div className='mt-8'>
+        <div className="mt-8">
           <TextInput
             value={otp}
             onChange={(e) => setOtp(e.target.value)}

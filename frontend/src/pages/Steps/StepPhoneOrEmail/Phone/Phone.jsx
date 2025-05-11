@@ -11,9 +11,10 @@ const Phone = ({ onNext }) => {
   const dispatch = useDispatch();
 
   const submit = async () => {
+    if (!phone) return;
     try {
       const { data } = await sendOtpService({ phone });
-      console.log(data, 'otpPhonec')
+      console.log(data, 'otpPhonec');
       dispatch(
         setOtp({ phone: data?.phone, hash: data?.hash, expires: data?.expires })
       );

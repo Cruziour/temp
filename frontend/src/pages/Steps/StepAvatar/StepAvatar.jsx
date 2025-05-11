@@ -1,15 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '../../../components/shared/Button/Button';
 import Card from '../../../components/shared/Card/Card';
 import { useDispatch, useSelector } from 'react-redux';
 import { activationService } from '../../../services';
-import { setAuth } from '../../../redux/slice/authSlice'
+import { setAuth } from '../../../redux/slice/authSlice';
+import Loader from '../../../components/shared/Loader/Loader'
 
 const StepAvatar = () => {
   const dispatch = useDispatch();
   const { name } = useSelector((state) => state.activateSlice);
   const [image, setImage] = useState('/images/monkey-avatar.png');
   const [file, setFile] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [unMounted, setUnMounted] = useState(false)
 
   const captureImage = (e) => {
     const uploadedFile = e.target.files[0];
@@ -21,21 +24,35 @@ const StepAvatar = () => {
 
   const submit = async () => {
     if (!file || !name) return;
-
     const formData = new FormData();
     formData.append('name', name);
     formData.append('avatar', file);
-
+    setLoading(true);
     try {
-      const { data } = await activationService(formData); 
-      if(data.auth) {
-        dispatch(setAuth(data))
+      const { data } = await activationService(formData);
+      if (data?.auth) {
+        if(!unMounted) {
+          console.log('data');
+          
+          dispatch(setAuth(data));
+        }
       }
-      console.log(data);
     } catch (error) {
       console.error(error, 'stepAvatar');
+    } finally {
+      setLoading(false);
     }
   };
+
+  useEffect(()=> {
+    return () => {
+      setUnMounted(true)
+    }
+  },[])
+
+  if(loading) {
+    return <Loader message={`Activation in progress...`} />
+  }
 
   return (
     <div className="flex justify-center items-center mt-20 container">

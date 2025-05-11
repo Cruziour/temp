@@ -227,4 +227,23 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
   }
 });
 
-export { sendOtp, verifyReceiveOtp, activateUser, refreshAccessToken };
+const logoutUser = asyncHandler(async (req, res) => {
+  await User.findByIdAndUpdate(
+    req.user?._id,
+    {
+      $set: {
+        refreshToken: null,
+      },
+    },
+    {
+      new: true,
+    }
+  );
+  return res
+    .status(200)
+    .clearCookie('accessToken')
+    .clearCookie('refreshToken')
+    .json(new ApiResponse(200, {user: null, auth: false}, 'User logged out successfully'));
+});
+
+export { sendOtp, verifyReceiveOtp, activateUser, refreshAccessToken, logoutUser };

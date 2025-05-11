@@ -7,8 +7,8 @@ const Card = ({ title, icon, children }) => {
       style={{ background: '#1D1D1D' }}
     >
       <div className="flex justify-center items-center gap-x-2 text-xl font-bold pt-1">
-        <img src={`/images/${icon}.png`} alt="" />
-        <h1>{title}</h1>
+        {icon && <img src={`/images/${icon}.png`} alt="" />}
+        {title && <h1>{title}</h1>}
       </div>
       {children}
     </div>
