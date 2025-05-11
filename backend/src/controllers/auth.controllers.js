@@ -146,7 +146,7 @@ const activateUser = asyncHandler(async (req, res) => {
         },
       },
       { new: true }
-    ).select('-refreshToken -updatedAt -__v');
+    ).select('-refreshToken -updatedAt');
     if (!user) {
       throw new ApiError(404, 'User not found');
     }
@@ -188,23 +188,23 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
       throw new ApiError(402, 'Invalid refresh token');
     }
 
-    const user = await User.findById(decodedToken._id).select(
-      '-refreshToken -updatedAt -__v'
-    );
+    const userInfo = await User.findById(decodedToken?._id);
 
-    if (!user) {
+    if (!userInfo) {
       throw new ApiError(404, 'User not found');
     }
 
-    // Compare tokens — make sure user.refreshToken exists and is valid
-    const storedUser = await User.findById(decodedToken._id); // re-fetch with token
-    if (incomingRefreshToken !== storedUser.refreshToken) {
+    if (incomingRefreshToken !== userInfo?.refreshToken) {
       throw new ApiError(402, 'Refresh token mismatch');
     }
 
     // Generate new tokens
-    const { accessToken, newRefreshToken } =
-      await generateAccessAndRefreshToken(user);
+    const { accessToken, refreshToken } =
+      await generateAccessAndRefreshToken(userInfo);
+
+    const user = await User.findById(userInfo?._id).select(
+      '-refreshToken -updatedAt'
+    );
 
     const options = {
       httpOnly: true,
@@ -214,16 +214,15 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     return res
       .status(200)
       .cookie('accessToken', accessToken, options)
-      .cookie('refreshToken', newRefreshToken, options)
+      .cookie('refreshToken', refreshToken, options)
       .json(
         new ApiResponse(
           200,
-          { user, accessToken, refreshToken: newRefreshToken },
+          { user, accessToken, refreshToken },
           'Access token refreshed successfully'
         )
       );
   } catch (error) {
-    console.error('Refresh token failed:', error); // log actual error
     throw new ApiError(500, error.message || 'Error refreshing access token');
   }
 });

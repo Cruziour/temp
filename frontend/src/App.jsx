@@ -10,8 +10,10 @@ import {
 } from 'react-router-dom';
 import Layout from './Layout';
 import { Activate, Authenticate, Home, Rooms } from './pages/index';
+import { useLoadingWithRefresh } from './hooks/useLoadingWithRefresh';
 
 const App = () => {
+  const { loading } = useLoadingWithRefresh();
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<Layout />}>
@@ -52,7 +54,7 @@ const App = () => {
     )
   );
 
-  return <RouterProvider router={router} />;
+  return <>{loading ? 'Loading....' : <RouterProvider router={router} />}</>;
 };
 
 // Guest Routes
