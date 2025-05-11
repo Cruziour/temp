@@ -13,7 +13,7 @@ const StepOtp = () => {
 
   const submit = async () => {
     try {
-      const { data } = await verifyOtpService({ phone, otp, hash, expires });
+      const { data } = await verifyOtpService({ phone, otp, hash, expires });  
       dispatch(setAuth(data));
     } catch (error) {
       console.log(error, 'stepOtp.jsx');
