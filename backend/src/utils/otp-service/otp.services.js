@@ -1,6 +1,6 @@
 import crypto from 'crypto';
-import twilio from 'twilio';
 import dotenv from 'dotenv';
+import twilio from 'twilio';
 
 dotenv.config();
 

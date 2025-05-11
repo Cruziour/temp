@@ -9,7 +9,7 @@ import {
   useLocation,
 } from 'react-router-dom';
 import Layout from './Layout';
-import { Activate, Authenticate, Home, Rooms } from './pages/index';
+import { Activate, Authenticate, Home, Room, Rooms } from './pages/index';
 import { useLoadingWithRefresh } from './hooks/useLoadingWithRefresh';
 import Loader from './components/shared/Loader/Loader';
 
@@ -47,6 +47,14 @@ const App = () => {
           element={
             <ProtectedRoute>
               <Rooms />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="room/:roomId"
+          element={
+            <ProtectedRoute>
+              <Room />
             </ProtectedRoute>
           }
         />

@@ -21,7 +21,7 @@ axiosInstance.interceptors.response.use((config) => {
   if (error.response.status === 401 && error.config && !error.config._isRetry) {
     originalRequest.isRetry = true
     try {
-      const response = await axios.get(
+      await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/api/v1/user/refresh-token`,
         {
           withCredentials: true,

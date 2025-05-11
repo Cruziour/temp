@@ -21,9 +21,11 @@ app.use(cookieParser());
 
 // Import Router
 import userRoute from './routes/user.routes.js';
+import roomRoute from './routes/room.routes.js';
 
 // Config router
 app.use('/api/v1/user', userRoute);
+app.use('/api/v1/room', roomRoute);
 
 // Import Error Middleware
 import errorHandler from './middlewares/error.middleware.js';

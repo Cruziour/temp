@@ -1,8 +1,13 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const RoomCard = ({ room }) => {
+  const navigate = useNavigate();
   return (
-    <div className="hover:bg-[#353333] relative bg-[#1d1d1d] rounded-4xl cursor-pointer text-sm p-6 min-h-[30vh] mx-h-[45vh] h-[33vh]">
+    <div
+      onClick={() => navigate(`/room/${room?._id}`)}
+      className="hover:bg-[#353333] relative bg-[#1d1d1d] rounded-4xl cursor-pointer text-sm p-6 min-h-[30vh] mx-h-[45vh] h-[33vh]"
+    >
       <h3 className="text-xl font-semibold pb-8">{room?.topic}</h3>
       {/* creator  */}
       <div className="flex justify-center">
@@ -23,7 +28,7 @@ const RoomCard = ({ room }) => {
             {room?.creator && (
               <>
                 <div className="flex gap-x-1" key={room?.creator._id}>
-                  <h3 className="text-lg pb-2">{room?.creator.name}</h3>
+                  <h3 className="text-lg pb-2">{room?.creator?.name}</h3>
                   <img
                     src="/images/chat-bubble.png"
                     alt="chat"
@@ -31,7 +36,7 @@ const RoomCard = ({ room }) => {
                   />
                 </div>
                 <p className="text-sm text-gray-400 leading-snug">
-                  {room?.creator?.description}
+                  {room?.description}
                 </p>
               </>
             )}
