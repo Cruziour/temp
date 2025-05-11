@@ -241,8 +241,8 @@ const Rooms = () => {
       <div className="">
         <div className="flex justify-between">
           <div className="flex justify-center items-center gap-x-4">
-            <div className="rounded-4xl pb-1 w-40 border-b-4 border-blue-600 pl-3">
-              <span className="text-lg font-semibold ">All active rooms</span>
+            <div className="rounded-4xl pb-1 w-40 border-b-4 border-blue-600 flex justify-center items-center">
+              <span className="text-lg font-semibold ">All rooms</span>
             </div>
             <div className="relative">
               <img
