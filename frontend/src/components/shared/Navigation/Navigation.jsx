@@ -26,7 +26,7 @@ const Navigation = () => {
         <div className="flex  justify-center items-center gap-x-4">
           {isAuth && (
             <>
-              <div className='bg-gray-800 px-4 py-2 rounded-4xl hover:bg-gray-700'>
+              <div className="border-b-4 rounded-4xl border-amber-500 px-4 py-2">
                 <h3 className="text-xl font-bold">{user?.name}</h3>
               </div>
               <Link to={'/'}>
