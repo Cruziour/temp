@@ -26,16 +26,20 @@ const Navigation = () => {
         <div className="flex  justify-center items-center gap-x-4">
           {isAuth && (
             <>
-              <div className="border-b-4 rounded-4xl border-amber-500 px-4 py-2">
-                <h3 className="text-xl font-bold">{user?.name}</h3>
-              </div>
-              <Link to={'/'}>
-                <img
-                  src={user?.avatar}
-                  alt="avatar"
-                  className="rounded-full w-12 h-12 border-2 border-blue-600"
-                />
-              </Link>
+              {user?.activated && (
+                <>
+                  <div className="border-b-4 rounded-4xl border-amber-500 px-4 py-2">
+                    <h3 className="text-xl font-bold">{user?.name}</h3>
+                  </div>
+                  <Link to={'/'}>
+                    <img
+                      src={user?.avatar}
+                      alt="avatar"
+                      className="rounded-full w-12 h-12 border-2 border-blue-600"
+                    />
+                  </Link>
+                </>
+              )}
               <button
                 onClick={logoutUser}
                 className="cursor-pointer bg-blue-800 hover:bg-blue-600 py-1 px-2 rounded-2xl"

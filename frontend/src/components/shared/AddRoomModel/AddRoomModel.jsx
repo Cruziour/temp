@@ -1,20 +1,24 @@
 import React, { useState } from 'react';
 import { createRoomService } from '../../../services/index.js';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 
 const AddRoomModel = ({ onClose }) => {
   const [roomType, setRoomType] = useState('open');
   const [topic, setTopic] = useState('');
   const [description, setDescription] = useState('');
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const createRoom = async () => {
-    if([topic, description].some(data => data.trim() == '')) return
+    if ([topic, description].some((data) => data.trim() == '')) return;
     // server call
     try {
-      const { data } = await createRoomService({ topic, description, roomType });
-      navigate(`/room/${data?._id}`)
+      const { data } = await createRoomService({
+        topic,
+        description,
+        roomType,
+      });
+      navigate(`/room/${data?._id}`);
     } catch (error) {
       console.log(error, 'addRoomModel');
     }

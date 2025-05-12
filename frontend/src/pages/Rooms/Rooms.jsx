@@ -8,11 +8,10 @@ const Rooms = () => {
   const [rooms, setRooms] = useState([]);
 
   useEffect(() => {
-    const fetchRooms = async () => {
+    (async () => {
       const { data } = await getAllRoomService({ roomType: 'open' });
       setRooms(data);
-    };
-    fetchRooms();
+    })();
   }, []);
 
   const openModel = () => {

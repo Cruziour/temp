@@ -14,6 +14,7 @@ const StepName = ({ onNext }) => {
       alert('Please enter your name');
     }
     dispatch(setName(fullName.trim()));
+    // setFullName('')
     onNext();
   };
   return (

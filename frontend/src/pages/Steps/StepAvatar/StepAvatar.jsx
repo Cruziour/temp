@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Button from '../../../components/shared/Button/Button';
 import Card from '../../../components/shared/Card/Card';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,13 +12,15 @@ const StepAvatar = () => {
   const [image, setImage] = useState('/images/monkey-avatar.png');
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [unMounted, setUnMounted] = useState(false);
+  // const [unMounted, setUnMounted] = useState(false);
 
   const captureImage = (e) => {
     const uploadedFile = e.target.files[0];
-    if (!uploadedFile) return;
+    if (!uploadedFile) {
+      setFile('/images/monkey-avatar.png');
+    }
     setFile(uploadedFile);
-    const imageUrl = URL.createObjectURL(uploadedFile);
+    const imageUrl = URL.createObjectURL(file);
     setImage(imageUrl);
   };
 
@@ -31,9 +33,7 @@ const StepAvatar = () => {
     try {
       const { data } = await activationService(formData);
       if (data?.auth) {
-        if (!unMounted) {
-          dispatch(setAuth(data));
-        }
+        dispatch(setAuth(data));
       }
     } catch (error) {
       console.error(error, 'stepAvatar');
@@ -42,11 +42,11 @@ const StepAvatar = () => {
     }
   };
 
-  useEffect(() => {
-    return () => {
-      setUnMounted(true);
-    };
-  }, []);
+  // useEffect(() => {
+  //   return () => {
+  //     setUnMounted(true);
+  //   };
+  // });
 
   if (loading) {
     return <Loader message={`Activation in progress...`} />;
