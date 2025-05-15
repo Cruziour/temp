@@ -50,8 +50,6 @@ const Rooms = () => {
               </button>
             </div>
           </div>
-          {/* list room */}
-          <div></div>
         </div>
         {/* list of rooms  */}
         <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 overflow-y-auto hide-scrollbar max-h-[76vh] min-h-[76vh]">
